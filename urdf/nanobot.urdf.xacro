@@ -1,0 +1,308 @@
+<?xml version="1.0"?>
+<robot name="nanobot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+
+<!-- This are the colors used in the design of the robot -->
+
+  <material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>
+
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+  
+  <material name="vibrantblue" >
+    <color rgba="0.011764705882352941 0.2235294117647059 0.9725490196078431 1.0" />
+  </material>
+
+<!--The gazebo plugins -->
+
+<gazebo reference="base_link">
+   <material>Gazebo/Blue</material>
+</gazebo>
+<gazebo reference="front_wheel_right">
+   <material>Gazebo/Black</material>
+</gazebo>
+<gazebo reference="front_wheel_left">
+   <material>Gazebo/Black</material>
+</gazebo>
+<gazebo reference="rear_wheel_right">
+   <material>Gazebo/Black</material>
+</gazebo>
+<gazebo reference="rear_wheel_left">
+   <material>Gazebo/Black</material>
+</gazebo>
+<gazebo reference="laser_sensor_link">
+   <material>Gazebo/White</material>
+</gazebo>
+
+
+<gazebo>
+  <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
+    <updateRate>10.0</updateRate>
+    <robotNamespace>/</robotNamespace>
+    <leftFrontJoint>base_link_to_front_wheel_left</leftFrontJoint>
+    <rightFrontJoint>base_link_to_front_wheel_right</rightFrontJoint>
+    <leftRearJoint>base_link_to_rear_wheel_left</leftRearJoint>
+    <rightRearJoint>base_link_to_rear_wheel_right</rightRearJoint>
+    <wheelSeparation>0.31</wheelSeparation>
+    <wheelDiameter>0.1</wheelDiameter>
+    <robotBaseFrame>base_footprint</robotBaseFrame>
+    <torque>20</torque>
+    <topicName>/cmd_vel</topicName>
+    <broadcastTF>true</broadcastTF>
+    <odometryTopic>/odom</odometryTopic>
+    <odometryFrame>odom</odometryFrame>
+    <odometryRate>10.0</odometryRate>
+</plugin>
+</gazebo>
+
+
+<!-- <gazebo reference="laser_sensor_link">
+    <sensor type="ray" name="RP_LIDAR_S2">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>0</min_angle>
+            <max_angle>6.28</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>10.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          
+          <mean>0.0</mean>
+          <stddev>0.1</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+        <topicName>/nanobot/laser/scan</topicName>
+        <frameName>laser_sensor_link</frameName>
+      </plugin>
+    </sensor>
+    
+  </gazebo>  -->
+
+
+  <gazebo reference="laser_sensor_link">
+    <sensor type="ray" name="head_hokuyo_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.14159265</min_angle>
+            <max_angle>3.14159265</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>10.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <!-- <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.3</stddev>
+        </noise> -->
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+        <topicName>/nanobot/laser/scan</topicName>
+        <frameName>laser_sensor_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo> 
+
+
+<!-- These are the description of a 3D model of a robot -->
+<link name="base_footprint">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+</link>
+
+
+<link name="base_link">
+   <visual>
+      <geometry>
+         <box size= "0.35 0.27 0.1"/>
+      </geometry> 
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="vibrantblue"/>
+   </visual>
+   <collision name="collision_chasis">
+      <geometry> 
+         <box size="0.35 0.27 0.1"/>
+      </geometry>
+      <material name="vibrantblue"/>
+   </collision>
+   <inertial>
+      <mass value="1.0"/> 
+      <inertia ixx="1.5e-3" iyy="4.1667e-3" izz="5.4167e-4"
+         ixy="0" ixz="0" iyz="0"/>  
+   </inertial>
+  </link> 
+
+
+    <joint name="chassis" type="fixed">
+        <axis xyz="0 0 0"/>
+        <parent link="base_footprint"/>
+        <child link="base_link"/>
+        <origin rpy="0 0 0" xyz="0 0 0.07"/>
+    </joint> 
+  
+  <link name="front_wheel_right"> 
+      <visual>
+         <geometry>
+            <cylinder length="0.04" radius="0.05"/>
+         </geometry>
+         <origin rpy="0 1.57079633 1.57079633" xyz="0.0 0.0 0.0"/>
+         <material name="black"/>
+      </visual>
+      <collision name="front_wheel_right_collision">
+         <geometry>
+            <cylinder length="0.04" radius="0.05"/>
+         </geometry>
+         <origin rpy="0 1.57079633 1.57079633" xyz="0.0 0.0 0.0"/>
+      </collision>
+      <inertial>
+         <mass value="0.1"/>
+         <origin rpy="0 1.57079633 0" xyz="0.0 0.0 0.0"/>
+         <inertia ixx="5.333e-5" iyy="5.333e-5" izz="8.00e-5" 
+         ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+  </link>
+
+  <joint name="base_link_to_front_wheel_right" type="continuous">
+    <axis xyz="0 1 0"/>
+    <parent link="base_link"/>
+    <child link="front_wheel_right"/>
+    <origin rpy="0 0 0" xyz="0.1 -0.155 -0.04"/>
+  </joint> 
+
+  <link name="front_wheel_left"> 
+      <visual>
+         <geometry>
+            <cylinder length="0.04" radius="0.05"/>
+         </geometry>
+         <origin rpy="0 1.57079633 1.57079633" xyz="0.0 0.0 0.0"/>
+         <material name="black"/>
+      </visual>
+      <collision name="front_wheel_left_collision">
+         <geometry>
+            <cylinder length="0.04" radius="0.05"/>
+         </geometry>
+         <origin rpy="0 1.57079633 1.57079633" xyz="0.0 0.0 0.0"/>
+      </collision>
+      <inertial>
+         <mass value="0.1"/>
+         <origin rpy="0 1.57079633 0" xyz="0.0 0.0 0.0"/>
+         <inertia ixx="5.333e-5" iyy="5.333e-5" izz="8.00e-5" 
+         ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+  </link>
+
+  <joint name="base_link_to_front_wheel_left" type="continuous">
+    <axis xyz="0 1 0"/>
+    <parent link="base_link"/>
+    <child link="front_wheel_left"/>
+    <origin rpy="0 0 0" xyz="0.1 0.155 -0.04"/>
+  </joint> 
+
+    <link name="rear_wheel_right"> 
+      <visual>
+         <geometry>
+            <cylinder length="0.04" radius="0.05"/>
+         </geometry>
+         <origin rpy="0 1.57079633 1.57079633" xyz="0.0 0.0 0.0"/>
+         <material name="black"/>
+      </visual>
+      <collision name="rear_wheel_right_collision">
+         <geometry>
+            <cylinder length="0.04" radius="0.05"/>
+         </geometry>
+         <origin rpy="0 1.57079633 1.57079633" xyz="0.0 0.0 0.0"/>
+      </collision>
+      <inertial>
+         <mass value="0.1"/>
+         <origin rpy="0 1.57079633 0" xyz="0.0 0.0 0.0"/>
+         <inertia ixx="5.333e-5" iyy="5.333e-5" izz="8.00e-5" 
+         ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+  </link>
+
+  <joint name="base_link_to_rear_wheel_right" type="continuous">
+    <axis xyz="0 1 0"/>
+    <parent link="base_link"/>
+    <child link="rear_wheel_right"/>
+    <origin rpy="0 0 0" xyz="-0.1 -0.155 -0.04"/>
+  </joint> 
+
+      <link name="rear_wheel_left"> 
+      <visual>
+         <geometry>
+            <cylinder length="0.04" radius="0.05"/>
+         </geometry>
+         <origin rpy="0 1.57079633 1.57079633" xyz="0.0 0.0 0.0"/>
+         <material name="black"/>
+      </visual>
+      <collision name="rear_wheel_left_collision">
+         <geometry>
+            <cylinder length="0.04" radius="0.05"/>
+         </geometry>
+         <origin rpy="0 1.57079633 1.57079633" xyz="0.0 0.0 0.0"/>
+      </collision>
+      <inertial>
+         <mass value="0.1"/>
+         <origin rpy="0 1.57079633 0" xyz="0.0 0.0 0.0"/>
+         <inertia ixx="5.333e-5" iyy="5.333e-5" izz="8.00e-5" 
+         ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+  </link>
+
+  <joint name="base_link_to_rear_wheel_left" type="continuous">
+    <axis xyz="0 1 0"/>
+    <parent link="base_link"/>
+    <child link="rear_wheel_left"/>
+    <origin rpy="0 0 0" xyz="-0.1 0.155 -0.04"/>
+  </joint> 
+
+  <link name="laser_sensor_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.05"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+
+    <collision name="collision_laser_link">
+     <geometry>
+      <cylinder length="0.1" radius="0.05"/>
+     </geometry>
+    </collision>
+  </link>
+  
+  <joint name="base_link_to_laser_sensor" type="fixed">
+    <axis xyz="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="laser_sensor_link"/>
+    <origin rpy="0 0 0" xyz="0.1 0 0.07"/>
+  </joint> 
+
+</robot>
