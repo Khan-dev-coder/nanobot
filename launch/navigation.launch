@@ -1,0 +1,30 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="open_rviz" default="true"/>
+  <arg name="move_forward_only" default="true"/>
+  <arg name="map_file" default="$(find nanobot)/maps/adnn.yaml"/>
+
+
+
+  <!-- Map server -->
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+       <!-- <node pkg="tf" type="static_transform_publisher" name="map_nav_broadcaster1" args="0 0 0.105 0 0 0 base_link camera_link 100"/> -->
+
+
+  <!-- AMCL -->
+  <include file="$(find nanobot)/launch/amcl.launch"/>
+
+  <!-- move_base -->
+  <include file="$(find nanobot)/launch/move_base.launch">
+    <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+  </include>
+
+
+<node pkg="tf" type="static_transform_publisher" name="map_nav_broadcaster" args="0 0 0 0 0 0 map odom 100"/>
+
+
+
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find starter)/rviz/path_planning.rviz" required="true" /> -->
+
+</launch>
