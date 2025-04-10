@@ -1426,3 +1426,27 @@ ninja: build stopped: subcommand failed.
 
 
 
+Determining if the C compiler works failed with the following output:
+Change Dir: /home/alif/simulation_ws/src/nanobot/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_77f7b && [1/2] Building C object CMakeFiles/cmTC_77f7b.dir/testCCompiler.c.o
+[2/2] Linking C executable cmTC_77f7b
+FAILED: cmTC_77f7b 
+: && /usr/bin/avr-gcc   -rdynamic CMakeFiles/cmTC_77f7b.dir/testCCompiler.c.o  -o cmTC_77f7b   && :
+avr-gcc: error: unrecognized command line option ‘-rdynamic’
+ninja: build stopped: subcommand failed.
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: /home/alif/simulation_ws/src/nanobot/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_2ad65 && [1/2] Building C object CMakeFiles/cmTC_2ad65.dir/testCCompiler.c.o
+[2/2] Linking C executable cmTC_2ad65
+FAILED: cmTC_2ad65 
+: && /usr/bin/avr-gcc   -rdynamic CMakeFiles/cmTC_2ad65.dir/testCCompiler.c.o  -o cmTC_2ad65   && :
+avr-gcc: error: unrecognized command line option ‘-rdynamic’
+ninja: build stopped: subcommand failed.
+
+
+
