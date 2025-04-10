@@ -3,14 +3,15 @@
 <launch>
   <param name="/use_sim_time" value="true" />
 
-  <node pkg="tf" type="static_transform_publisher" name="base_link_to_laser"
-    args="0.1 0 0.07 0.0 0.0 0.0 base_link laser_sensor_link 40" />
+  
+  <node pkg="tf" type="static_transform_publisher" name="map_to_odom"
+    args="0.0 0 0.00 0.0 0.0 0.0 map odom 10" /> 
 
   <node pkg="slam_karto" type="slam_karto" name="slam_karto" output="screen">
     <param name="scan_topic" value="/nanobot/laser/scan"/>
     <param name="odom_frame" value="odom"/>
     <param name="map_update_interval" value="25"/>
-    <param name="resolution" value="0.025"/>
+    <param name="resolution" value="0.10"/>
     <rosparam command="load" file="$(find slam_karto)/config/mapper_params.yaml" />
   </node>
 

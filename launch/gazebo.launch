@@ -2,7 +2,7 @@
 <launch> 
 	<param name="robot_description" textfile="$(find nanobot)/urdf/nanobot.urdf.xacro" /> 
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-		<arg name="world_name" value="$(find nanobot)/worlds/test_environment.world"/>
+		<arg name="world_name" value="$(find nanobot)/worlds/map.world"/>
 	</include> 
 	<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
 	args="-param robot_description -urdf -model nanobot "/> 
